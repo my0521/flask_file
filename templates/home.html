@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}"/>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1 align="center">test</h1>
+
+    <form class="form-horizontal" role="form" action="/upload" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label for="inputfile" class="col-sm-4 control-label">选择文件：</label>
+            <div class="col-sm-8">
+                <input name="image" id="inputfile" type="file">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nowDate" class="col-sm-4 control-label">time：</label>
+            <div class="col-sm-8">
+                <input id="nowDate" type="date" name="indate" value="2015-09-24"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">平 台：</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="options1" id="test1" value="test1" checked> test1
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="options1" id="test2" value="test2"> test2
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">设备类型：</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="optionsDT" id="test3" value="test3" checked> test3
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optionsDT" id="test4" value="test4"> test4
+                </label>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </label>
+        </div>
+        <div class="form-group">
+            {% if msg %}
+            <label class="control-label">{{ msg }} </label>
+            {% endif %}
+        </div>
+    </form>
+    <p>历史构建</p>
+    <table class="table table-bordered">
+        <tr>
+            <th>file</th>
+            <th>build date</th>
+            <th>file size</th>
+        </tr>
+        {% for item in download %}
+        <tr>
+            <td><a href="#">
+          <span onclick="download(this)" class="glyphicon glyphicon-download-alt">
+              {{ item['file'] }}
+          </span>
+            </a></td>
+            <td>{{ item['date'] }}</td>
+            <td>{{ item['size'] }}MB</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+
+<script>
+        //初始化时间控件
+        var now = new Date();
+
+        var nowYear = now.getFullYear() ; //年
+        var nowMonth = now.getMonth()+1<10?"0"+(now.getMonth()+1):now.getMonth(); //月
+        var nowDay = now.getDate()<10?"0"+now.getDate():now.getDate() ; //日期
+        var nowDate = nowYear+"-"+nowMonth+"-"+nowDay ;
+        $("#nowDate").val(nowDate) ;
+
+    function download (e) {
+	    //console.log(e.innerText);
+	    var content = "http://"+window.location.host +"/download/" + e.innerText.trim();
+	    //console.log(content);
+	    var aEle = document.createElement("a");// 创建a标签
+        aEle.download = e.innerText;// 设置下载文件的文件名
+        aEle.href = content;// content为后台返回的下载地址
+        aEle.click();// 设置点击事件
+    }
+
+</script>
+</body>
+</html>

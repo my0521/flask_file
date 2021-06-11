@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}"/>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>历史构建</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>file</th>
+            <th>date</th>
+            <th>size</th>
+        </tr>
+        {% for item in download %}
+        <tr>
+            <td><a href="#">
+          <span onclick="download(this)" class="glyphicon glyphicon-download-alt">
+              {{ item['file'] }}
+          </span>
+            </a></td>
+            <td>{{ item['date'] }}</td>
+            <td>{{ item['size'] }}MB</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+
+<script>
+        //初始化时间控件
+        var now = new Date();
+
+        var nowYear = now.getFullYear() ; //年
+        var nowMonth = now.getMonth()+1<10?"0"+(now.getMonth()+1):now.getMonth() + 3 ; //月
+        var nowDay = now.getDate()<10?"0"+now.getDate():now.getDate() ; //日期
+        var nowDate = nowYear+"-"+nowMonth+"-"+nowDay ;
+        $("#nowDate").val(nowDate) ;
+
+        function download (e) {
+	    //console.log(e.innerText);
+	    var content = "http://"+window.location.host +"/download/" + e.innerText.trim();
+	    //console.log(content);
+	    var aEle = document.createElement("a");// 创建a标签
+        aEle.download = e.innerText;// 设置下载文件的文件名
+        aEle.href = content;// content为后台返回的下载地址
+        aEle.click();// 设置点击事件
+       }
+
+</script>
+</body>
+</html>
